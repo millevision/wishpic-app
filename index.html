@@ -233,35 +233,31 @@
 
     document.querySelectorAll(".option-btn").forEach(btn => {
       btn.onclick = () => {
-        answers[step] = btn.textContent;
-        step++;
-        if (step < steps.length) {
-          render();
-        } else {
-          showResult();
-        }
-      };
+  const answer = btn.textContent;
+  answers[step] = answer;
+
+  placeSymbol(answer, steps[step].zone);
+
+  step++;
+  if (step < steps.length) {
+    render();
+  } else {
+    showResult();
+  }
+};
     });
 
     renderPreview();
   }
 
-  function renderPreview() {
-  if (answers.length === 0) {
-    preview.innerHTML =
-      `<div class="placeholder">Your visual structure appears here.</div>`;
-    return;
-  }
+  function placeSymbol(answer, zone) {
+  const symbol = SYMBOLS[answer] || "⬜";
+  const el = document.createElement("div");
+  el.className = "symbol";
+  el.textContent = symbol;
 
-  preview.innerHTML = answers
-    .map(a => {
-      const symbol = SYMBOLS[a] || "⬜";
-      return `
-        <div class="card">
-          <span style="font-size:22px;margin-right:8px">${symbol}</span>
-        </div>
-      `;
-    })
+  document.getElementById(`zone-${zone}`).appendChild(el);
+}
     .join("");
 }
 
