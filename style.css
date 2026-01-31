@@ -1,3 +1,7 @@
+.hero {
+  background: #0f0f0f;
+  color: #f5f5f5;
+}
 * {
   box-sizing: border-box;
 }
