@@ -1,13 +1,42 @@
 <!DOCTYPE html>
 <html lang="sv">
-  <head>
-    <meta charset="utf-8"><link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="style.css">
+<head>
+  <meta charset="utf-8">
+  <title>WishPic – Input</title>
+</head>
+<body>
+  <h1>WishPic</h1>
 
-    <title>WishPic</title>
-  </head>
-  <body>
-    <h1>WishPic fungerar</h1>
+  <form id="wishpic-form">
+    <label>
+      Organisation
+      <input type="text" id="org" required>
+    </label>
+    <br><br>
+
+    <label>
+      Nuläge
+      <textarea id="now" rows="3" required></textarea>
+    </label>
+    <br><br>
+
+    <label>
+      Mål / Vision
+      <textarea id="vision" rows="3" required></textarea>
+    </label>
+    <br><br>
+
+    <label>
+      Hinder / Utmaningar
+      <textarea id="blocks" rows="3"></textarea>
+    </label>
+    <br><br>
+
+    <button type="submit">Skapa WishPic</button>
+  </form>
+
+  <pre id="output"></pre>
+
   <script src="script.js"></script>
 </body>
 </html>
