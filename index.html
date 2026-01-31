@@ -294,8 +294,7 @@ function placeSymbol(answer, zone) {
 
   const index = zoneOffsets[zone] || 0;
   const x = (index % cols) * (symbolSize + padding);
-  const y = Math.floor(index / cols) * (symbolSize + padding);
-
+  const y = 80 + Math.floor(index / cols) * (symbolSize + padding);
   // håll inom zonens höjd
   if (y + symbolSize <= zoneHeight) {
     el.style.left = `${x}px`;
