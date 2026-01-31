@@ -230,11 +230,6 @@
     .join("");
 }
 
-    preview.innerHTML = answers
-      .map((a, i) => `<div class="card"><strong>${i + 1}</strong> · ${a}</div>`)
-      .join("") || `<div class="placeholder">Your visual structure appears here.</div>`;
-  }
-
   function showResult() {
     qEl.textContent = "Done.";
     document.querySelector(".options").remove();
