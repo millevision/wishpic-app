@@ -212,6 +212,24 @@
   }
 
   function renderPreview() {
+  if (answers.length === 0) {
+    preview.innerHTML =
+      `<div class="placeholder">Your visual structure appears here.</div>`;
+    return;
+  }
+
+  preview.innerHTML = answers
+    .map(a => {
+      const symbol = SYMBOLS[a] || "⬜";
+      return `
+        <div class="card">
+          <span style="font-size:22px;margin-right:8px">${symbol}</span>
+        </div>
+      `;
+    })
+    .join("");
+}
+
     preview.innerHTML = answers
       .map((a, i) => `<div class="card"><strong>${i + 1}</strong> · ${a}</div>`)
       .join("") || `<div class="placeholder">Your visual structure appears here.</div>`;
