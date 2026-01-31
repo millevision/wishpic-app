@@ -282,11 +282,19 @@
 
   }
 
-  function placeSymbol(answer, zone) {
+function placeSymbol(answer, zone) {
   const symbol = SYMBOLS[answer] || "⬜";
   const el = document.createElement("div");
   el.className = "symbol";
   el.textContent = symbol;
+
+  // lätt spridning
+  const offsetX = Math.random() * 20;
+  const offsetY = Math.random() * 20;
+
+  el.style.position = "relative";
+  el.style.left = `${offsetX}px`;
+  el.style.top = `${offsetY}px`;
 
   document.getElementById(`zone-${zone}`).appendChild(el);
 }
