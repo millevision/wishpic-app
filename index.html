@@ -149,7 +149,12 @@
 </div>
 
 
-<script>const SYMBOLS = {
+<script>const zoneOffsets = {
+  situation: 0,
+  path: 0,
+  vision: 0
+};
+const SYMBOLS = {
   "Startup": "🚀",
   "Scaleup": "📈",
   "Innovation team": "🧪",
@@ -288,16 +293,14 @@ function placeSymbol(answer, zone) {
   el.className = "symbol";
   el.textContent = symbol;
 
-  const zoneEl = document.getElementById(`zone-${zone}`);
-  const zoneRect = zoneEl.getBoundingClientRect();
+  const offset = zoneOffsets[zone] || 0;
 
-  const x = Math.random() * (zoneRect.width - 30);
-  const y = Math.random() * (zoneRect.height - 30);
+  el.style.left = `${offset * 18}px`;
+  el.style.top = `${offset * 14}px`;
 
-  el.style.left = `${x}px`;
-  el.style.top = `${y}px`;
+  zoneOffsets[zone] = offset + 1;
 
-  zoneEl.appendChild(el);
+  document.getElementById(`zone-${zone}`).appendChild(el);
 }
 function showResult() {
   qEl.textContent = "Done.";
