@@ -172,43 +172,52 @@
 };
 
   const steps = [
-    {
-      q: "What best describes your team or organization?",
-      options: ["Startup", "Scaleup", "Innovation team", "Business development"]
-    },
-    {
-      q: "What is your main ambition right now?",
-      options: ["Grow faster", "Find focus", "Align the team", "Explore new directions"]
-    },
-    {
-      q: "If things go well, what should be true in 12–24 months?",
-      options: ["Clear strategy", "Stronger execution", "New business model", "Scalable growth"]
-    },
-    {
-      q: "What matters most to get right?",
-      options: ["Priorities", "Ownership", "Speed", "Quality"]
-    },
-    {
-      q: "What is the biggest obstacle today?",
-      options: ["Too many initiatives", "Unclear direction", "Lack of resources", "Low alignment"]
-    },
-    {
-      q: "What other obstacles are slowing you down?",
-      options: ["Decision-making", "Communication", "Processes", "Capabilities"]
-    },
-    {
-      q: "What is already in motion?",
-      options: ["Ongoing initiatives", "Experiments", "Internal change", "Nothing yet"]
-    },
-    {
-      q: "What feels unclear or risky?",
-      options: ["Market", "Execution", "Team", "Timing"]
-    },
-    {
-      q: "What would success make possible next?",
-      options: ["Scale", "Invest", "Expand", "Refocus"]
-    }
-  ];
+  {
+    q: "What best describes your team or organization?",
+    zone: "situation",
+    options: ["Startup", "Scaleup", "Innovation team", "Business development"]
+  },
+  {
+    q: "What is your main ambition right now?",
+    zone: "vision",
+    options: ["Grow faster", "Find focus", "Align the team", "Explore new directions"]
+  },
+  {
+    q: "If things go well, what should be true in 12–24 months?",
+    zone: "vision",
+    options: ["Clear strategy", "Stronger execution", "New business model", "Scalable growth"]
+  },
+  {
+    q: "What matters most to get right?",
+    zone: "path",
+    options: ["Priorities", "Ownership", "Speed", "Quality"]
+  },
+  {
+    q: "What is the biggest obstacle today?",
+    zone: "path",
+    options: ["Too many initiatives", "Unclear direction", "Lack of resources", "Low alignment"]
+  },
+  {
+    q: "What other obstacles are slowing you down?",
+    zone: "path",
+    options: ["Decision-making", "Communication", "Processes", "Capabilities"]
+  },
+  {
+    q: "What is already in motion?",
+    zone: "path",
+    options: ["Ongoing initiatives", "Experiments", "Internal change", "Nothing yet"]
+  },
+  {
+    q: "What feels unclear or risky?",
+    zone: "path",
+    options: ["Market", "Execution", "Team", "Timing"]
+  },
+  {
+    q: "What would success make possible next?",
+    zone: "vision",
+    options: ["Scale", "Invest", "Expand", "Refocus"]
+  }
+];
 
   let step = 0;
   const answers = [];
