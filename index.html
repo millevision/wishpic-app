@@ -293,14 +293,27 @@ function placeSymbol(answer, zone) {
   el.className = "symbol";
   el.textContent = symbol;
 
-  const offset = zoneOffsets[zone] || 0;
+  const zoneEl = document.getElementById(`zone-${zone}`);
+  const zoneWidth = zoneEl.offsetWidth;
+  const zoneHeight = zoneEl.offsetHeight;
 
-  el.style.left = `${offset * 18}px`;
-  el.style.top = `${offset * 14}px`;
+  const symbolSize = 32;     // ca storlek i px
+  const padding = 8;         // mellanrum
 
-  zoneOffsets[zone] = offset + 1;
+  const cols = Math.floor(zoneWidth / (symbolSize + padding)) || 1;
+  const rows = Math.floor(zoneHeight / (symbolSize + padding)) || 1;
 
-  document.getElementById(`zone-${zone}`).appendChild(el);
+  const index = zoneOffsets[zone] || 0;
+  const x = (index % cols) * (symbolSize + padding);
+  const y = Math.floor(index / cols) * (symbolSize + padding);
+
+  // håll inom zonens höjd
+  if (y + symbolSize <= zoneHeight) {
+    el.style.left = `${x}px`;
+    el.style.top = `${y}px`;
+    zoneEl.appendChild(el);
+    zoneOffsets[zone] = index + 1;
+  }
 }
 function showResult() {
   qEl.textContent = "Done.";
