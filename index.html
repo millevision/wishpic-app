@@ -2,150 +2,126 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>WishPic</title>
+  <title>WishPic – Visual Strategy</title>
+
   <style>
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
-      font-family: Inter, system-ui, sans-serif;
       height: 100vh;
       display: flex;
+      font-family: Inter, system-ui, sans-serif;
       background: #0f0f0f;
       color: #eaeaea;
     }
-    .left, .right {
-      padding: 24px;
-      overflow: auto;
-    }
+
+    /* LEFT: FORM */
     .left {
-      width: 45%;
+      width: 42%;
+      padding: 32px;
       border-right: 1px solid #222;
-      background: #0f0f0f;
     }
-    .right {
-  width: 55%;
-  background: #111;
-  height: 100vh;
-}
-    h1 {
-      margin-top: 0;
-      font-size: 20px;
-      font-weight: 600;
-    }
+
     .progress {
-      color: #888;
       font-size: 12px;
+      color: #777;
       margin-bottom: 16px;
     }
-    textarea {
+
+    h1 {
+      font-size: 20px;
+      margin: 0 0 16px 0;
+    }
+
+    .options button {
+      display: block;
       width: 100%;
-      background: #111;
+      text-align: left;
+      margin-bottom: 8px;
+      padding: 10px 14px;
+      border-radius: 18px;
       border: 1px solid #333;
+      background: #111;
       color: #fff;
-      padding: 12px;
-      border-radius: 6px;
-      resize: none;
+      cursor: pointer;
       font-size: 14px;
     }
-    button {
-      margin-top: 12px;
-      padding: 8px 16px;
-      background: #fff;
-      color: #000;
-      border: none;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 13px;
+
+    .options button:hover {
+      background: #1a1a1a;
     }
-    button:disabled {
-      opacity: .4;
-      cursor: not-allowed;
+
+    /* RIGHT: VISUAL MAP */
+    .right {
+      width: 58%;
+      padding: 32px;
+      position: relative;
     }
-    .card {
-      background: #151515;
-      border: 1px solid #222;
-      border-radius: 8px;
-      padding: 12px;
-      margin-bottom: 10px;
-      font-size: 13px;
+
+    .map {
+      position: relative;
+      height: 100%;
     }
-    .placeholder {
+
+    /* Invisible logical zones */
+    .zone {
+      position: absolute;
+      top: 80px;
+      height: calc(100% - 120px);
+      padding: 10px;
+    }
+
+    #zone-situation { left: 0; width: 30%; }
+    #zone-path      { left: 35%; width: 30%; }
+    #zone-vision    { left: 70%; width: 30%; }
+
+    /* SYMBOLS */
+    .symbol {
+      position: absolute;
+      font-size: 28px;
+      opacity: 0;
+      animation: appear 0.3s ease forwards;
+    }
+
+    @keyframes appear {
+      to { opacity: 1; }
+    }
+
+    .hint {
+      position: absolute;
+      bottom: 24px;
+      left: 32px;
       color: #555;
-      font-style: italic;
-    }.map {
-  display: flex;
-  gap: 16px;
-}
-
-.zone {
-  border: none;
-}
-
-.zone h3 {
-  display: none;
-}
-
-.map {
-  gap: 0;
-}
-.zone h3 {
-  font-size: 13px;
-  color: #777;
-  margin-top: 0;
-}
-
-.symbol {
-  font-size: 28px;
-  position: absolute;
-  transition: transform 0.2s ease-out;
-}
-.map {
-  display: flex;
-  height: 100%;
-}
-.zone {
-  position: relative;      /* ← ANKARE FÖR SYMBOLER */
-  width: 30%;
-  height: 100%;
-  overflow: hidden;
-}
+      font-size: 12px;
+    }
   </style>
 </head>
+
 <body>
 
-<div class="left">
-  <div class="progress" id="progress"></div>
-  <h1 id="question"></h1>
-  <button id="next" disabled>Next</button>
-</div>
-
-<div class="right">
-  <h1>Live Map</h1>
-
-  <div class="map">
-    <div class="zone" id="zone-situation">
-      <h3>Situation</h3>
-    </div>
-
-    <div class="zone" id="zone-path">
-      <h3>Path</h3>
-    </div>
-
-    <div class="zone" id="zone-vision">
-      <h3>Vision</h3>
-    </div>
+  <!-- LEFT -->
+  <div class="left">
+    <div class="progress" id="progress"></div>
+    <h1 id="question"></h1>
+    <div class="options" id="options"></div>
   </div>
-</div>
 
+  <!-- RIGHT -->
+  <div class="right">
+    <div class="map">
+      <div class="zone" id="zone-situation"></div>
+      <div class="zone" id="zone-path"></div>
+      <div class="zone" id="zone-vision"></div>
+    </div>
+    <div class="hint">Situation → Path → Vision</div>
+  </div>
 
-<script>const zoneOffsets = {
-  situation: 0,
-  path: 0,
-  vision: 0
-};
+<script>
+/* SYMBOL LANGUAGE (replace with your own icons later) */
 const SYMBOLS = {
-  "Startup": "🚀",
-  "Scaleup": "📈",
+  Startup: "🚀",
+  Scaleup: "📈",
   "Innovation team": "🧪",
   "Business development": "🧭",
 
@@ -159,159 +135,79 @@ const SYMBOLS = {
   "New business model": "💡",
   "Scalable growth": "🏗️",
 
-  "Priorities": "⭐",
-  "Ownership": "🖐️",
-  "Speed": "⏩",
-  "Quality": "✔️",
-
-  "Too many initiatives": "🌀",
-  "Unclear direction": "❓",
-  "Lack of resources": "🪫",
-  "Low alignment": "🔀",
-
-  "Decision-making": "⚖️",
-  "Communication": "💬",
-  "Processes": "⚙️",
-  "Capabilities": "🧠",
-
-  "Ongoing initiatives": "🔄",
-  "Experiments": "🧫",
-  "Internal change": "🔁",
-  "Nothing yet": "⏸️",
-
-  "Market": "🌍",
-  "Execution": "🏃",
-  "Team": "👥",
-  "Timing": "⏰",
-
-  "Scale": "📊",
-  "Invest": "💰",
-  "Expand": "➕",
-  "Refocus": "🔄"
+  Priorities: "⭐",
+  Ownership: "🖐️",
+  Speed: "⏩",
+  Quality: "✔️"
 };
 
-  const steps = [
-  {
-    q: "What best describes your team or organization?",
-    zone: "situation",
-    options: ["Startup", "Scaleup", "Innovation team", "Business development"]
-  },
-  {
-    q: "What is your main ambition right now?",
-    zone: "vision",
-    options: ["Grow faster", "Find focus", "Align the team", "Explore new directions"]
-  },
-  {
-    q: "If things go well, what should be true in 12–24 months?",
-    zone: "vision",
-    options: ["Clear strategy", "Stronger execution", "New business model", "Scalable growth"]
-  },
-  {
-    q: "What matters most to get right?",
-    zone: "path",
-    options: ["Priorities", "Ownership", "Speed", "Quality"]
-  },
-  {
-    q: "What is the biggest obstacle today?",
-    zone: "path",
-    options: ["Too many initiatives", "Unclear direction", "Lack of resources", "Low alignment"]
-  },
-  {
-    q: "What other obstacles are slowing you down?",
-    zone: "path",
-    options: ["Decision-making", "Communication", "Processes", "Capabilities"]
-  },
-  {
-    q: "What is already in motion?",
-    zone: "path",
-    options: ["Ongoing initiatives", "Experiments", "Internal change", "Nothing yet"]
-  },
-  {
-    q: "What feels unclear or risky?",
-    zone: "path",
-    options: ["Market", "Execution", "Team", "Timing"]
-  },
-  {
-    q: "What would success make possible next?",
-    zone: "vision",
-    options: ["Scale", "Invest", "Expand", "Refocus"]
-  }
+/* METHOD: 1 (situation) → 3 (path) → 2 (vision) */
+const steps = [
+  { q: "What best describes your organization?", zone: "situation",
+    options: ["Startup","Scaleup","Innovation team","Business development"] },
+
+  { q: "What matters most to get right?", zone: "path",
+    options: ["Priorities","Ownership","Speed","Quality"] },
+
+  { q: "What is your main ambition?", zone: "vision",
+    options: ["Grow faster","Find focus","Align the team","Explore new directions"] },
+
+  { q: "If things go well, what should be true in 12–24 months?", zone: "vision",
+    options: ["Clear strategy","Stronger execution","New business model","Scalable growth"] }
 ];
 
-  let step = 0;
-  const answers = [];
+let step = 0;
+const zoneCounters = { situation:0, path:0, vision:0 };
 
-  const qEl = document.getElementById("question");
-  const pEl = document.getElementById("progress");
-  const preview = document.getElementById("preview");
-  const left = document.querySelector(".left");
+const qEl = document.getElementById("question");
+const pEl = document.getElementById("progress");
+const optionsEl = document.getElementById("options");
 
-  function render() {
-    pEl.textContent = `${step + 1} / ${steps.length}`;
-    qEl.textContent = steps[step].q;
+function render() {
+  const s = steps[step];
+  pEl.textContent = `${step + 1} / ${steps.length}`;
+  qEl.textContent = s.q;
 
-    const buttons = steps[step].options
-      .map(
-        opt => `<button class="option-btn">${opt}</button>`
-      )
-      .join("");
+  optionsEl.innerHTML = "";
+  s.options.forEach(opt => {
+    const btn = document.createElement("button");
+    btn.textContent = opt;
+    btn.onclick = () => select(opt, s.zone);
+    optionsEl.appendChild(btn);
+  });
+}
 
-    left.querySelectorAll(".option-btn").forEach(b => b.remove());
-    qEl.insertAdjacentHTML("afterend", `<div class="options">${buttons}</div>`);
-
-    document.querySelectorAll(".option-btn").forEach(btn => {
-      btn.onclick = () => {
-  const answer = btn.textContent;
-  answers[step] = answer;
-
-  placeSymbol(answer, steps[step].zone);
-
+function select(answer, zone) {
+  placeSymbol(answer, zone);
   step++;
-  if (step < steps.length) {
-    render();
-  } else {
-    showResult();
-  }
-};
-    });
+  if (step < steps.length) render();
+  else finish();
+}
 
-  }
 function placeSymbol(answer, zone) {
-  const symbol = SYMBOLS[answer] || "⬜";
+  const zoneEl = document.getElementById(`zone-${zone}`);
   const el = document.createElement("div");
   el.className = "symbol";
-  el.textContent = symbol;
+  el.textContent = SYMBOLS[answer] || "⬜";
 
-  const zoneEl = document.getElementById(`zone-${zone}`);
-  const zoneWidth = zoneEl.offsetWidth;
-  const zoneHeight = zoneEl.offsetHeight;
+  const index = zoneCounters[zone]++;
+  const col = index % 3;
+  const row = Math.floor(index / 3);
 
-  const symbolSize = 32;     // ca storlek i px
-  const padding = 8;         // mellanrum
+  el.style.left = `${20 + col * 48}px`;
+  el.style.top  = `${40 + row * 48}px`;
 
-  const cols = Math.floor(zoneWidth / (symbolSize + padding)) || 1;
-  const rows = Math.floor(zoneHeight / (symbolSize + padding)) || 1;
-
-  const index = zoneOffsets[zone] || 0;
-  const x = (index % cols) * (symbolSize + padding);
-  const y = 80 + Math.floor(index / cols) * (symbolSize + padding);
-  // håll inom zonens höjd
-  if (y + symbolSize <= zoneHeight) {
-    el.style.left = `${x}px`;
-    el.style.top = `${y}px`;
-    zoneEl.appendChild(el);
-    zoneOffsets[zone] = index + 1;
-  }
+  zoneEl.appendChild(el);
 }
-function showResult() {
-  qEl.textContent = "Done.";
-  document.querySelector(".options").remove();
-  pEl.textContent = "Result";
+
+function finish() {
+  qEl.textContent = "Your WishPic is ready.";
+  optionsEl.innerHTML = "";
+  pEl.textContent = "Done";
 }
 
 render();
 </script>
-
 
 </body>
 </html>
