@@ -2,41 +2,50 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>WishPic – Visual Strategy</title>
+  <title>WishPic</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>WishPic</h1>
 
-  <form id="wishpic-form">
-    <label>
-      Organization
-      <input type="text" id="org" required>
-    </label>
-    <br><br>
+  <header class="hero">
+    <div class="hero-inner">
+      <h1>Visual strategy for complex realities</h1>
+      <p>
+        WishPic turns goals, challenges and context into a single,
+        shared strategic image.
+      </p>
+      <button>Start a WishPic</button>
+    </div>
+  </header>
 
-    <label>
-      Current situation
-      <textarea id="now" rows="3" required></textarea>
-    </label>
-    <br><br>
+  <section class="section">
+    <h2>What it does</h2>
+    <p>
+      Organizations hold fragmented knowledge.
+      WishPic transforms it into a visual roadmap that supports dialogue,
+      leadership and decision-making.
+    </p>
+  </section>
 
-    <label>
-      Vision / Goal
-      <textarea id="vision" rows="3" required></textarea>
-    </label>
-    <br><br>
+  <section class="section alt">
+    <h2>How it works</h2>
+    <ol>
+      <li>Structured input (context, goals, challenges)</li>
+      <li>Interpretation & visual composition</li>
+      <li>A shared strategic image</li>
+    </ol>
+  </section>
 
-    <label>
-      Challenges / Obstacles
-      <textarea id="blocks" rows="3"></textarea>
-    </label>
-    <br><br>
+  <section class="section">
+    <h2>For whom</h2>
+    <p>
+      Leadership teams, startups, innovation units, coaches and consultants.
+    </p>
+  </section>
 
-    <button type="submit">Create WishPic</button>
-  </form>
+  <footer class="footer">
+    <p>WishPic — visual thinking, made tangible.</p>
+  </footer>
 
-  <pre id="output"></pre>
-
-  <script src="script.js"></script>
 </body>
 </html>
