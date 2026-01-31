@@ -99,26 +99,14 @@
   transition: transform 0.2s ease-out;
 }
 .map {
-  position: relative;
+  display: flex;
   height: 100%;
-  overflow: hidden; /* ← KRITISK */
 }
 .zone {
-  position: absolute;
-  top: 40px;
+  position: relative;      /* ← ANKARE FÖR SYMBOLER */
   width: 30%;
-  height: calc(100% - 60px);
-}
-#zone-situation {
-  left: 0;
-}
-
-#zone-path {
-  left: 35%;
-}
-
-#zone-vision {
-  left: 70%;
+  height: 100%;
+  overflow: hidden;
 }
   </style>
 </head>
