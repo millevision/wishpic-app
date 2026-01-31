@@ -282,24 +282,23 @@
     });
 
   }
-
 function placeSymbol(answer, zone) {
   const symbol = SYMBOLS[answer] || "⬜";
   const el = document.createElement("div");
   el.className = "symbol";
   el.textContent = symbol;
 
-  // lätt spridning
-  const offsetX = Math.random() * 20;
-  const offsetY = Math.random() * 20;
+  const zoneEl = document.getElementById(`zone-${zone}`);
+  const zoneRect = zoneEl.getBoundingClientRect();
 
-  el.style.position = "relative";
-  el.style.left = `${offsetX}px`;
-  el.style.top = `${offsetY}px`;
+  const x = Math.random() * (zoneRect.width - 30);
+  const y = Math.random() * (zoneRect.height - 30);
 
-  document.getElementById(`zone-${zone}`).appendChild(el);
+  el.style.left = `${x}px`;
+  el.style.top = `${y}px`;
+
+  zoneEl.appendChild(el);
 }
-
 function showResult() {
   qEl.textContent = "Done.";
   document.querySelector(".options").remove();
