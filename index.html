@@ -78,3 +78,79 @@
 
 <div class="left">
   <div class="progress" id="progress"></div>
+  <h1 id="question"></h1>
+  <textarea id="input" rows="4" placeholder="Write a short, concrete answer…"></textarea>
+  <button id="next" disabled>Next</button>
+</div>
+
+<div class="right">
+  <h1>Live Map</h1>
+  <div id="preview" class="placeholder">
+    Your visual structure appears here while you answer.
+  </div>
+</div>
+
+<script>
+  const questions = [
+    "What best describes your team or organization?",
+    "What is your main ambition right now?",
+    "If things go well, what should be true in 12–24 months?",
+    "What matters most to get right?",
+    "What is the biggest obstacle today?",
+    "What other obstacles are slowing you down?",
+    "What is already in motion?",
+    "What feels unclear or risky?",
+    "What would success make possible next?"
+  ];
+
+  let step = 0;
+  const answers = [];
+
+  const qEl = document.getElementById("question");
+  const pEl = document.getElementById("progress");
+  const iEl = document.getElementById("input");
+  const bEl = document.getElementById("next");
+  const preview = document.getElementById("preview");
+
+  function render() {
+    qEl.textContent = questions[step];
+    pEl.textContent = `${step + 1} / ${questions.length}`;
+    iEl.value = answers[step] || "";
+    bEl.textContent = step === questions.length - 1 ? "Finish" : "Next";
+    bEl.disabled = !iEl.value.trim();
+    renderPreview();
+  }
+
+  function renderPreview() {
+    if (answers.length === 0) {
+      preview.innerHTML = `<div class="placeholder">Your visual structure appears here while you answer.</div>`;
+      return;
+    }
+    preview.innerHTML = answers
+      .map((a, i) => `<div class="card"><strong>${i + 1}</strong> · ${a}</div>`)
+      .join("");
+  }
+
+  iEl.addEventListener("input", () => {
+    bEl.disabled = !iEl.value.trim();
+  });
+
+  bEl.addEventListener("click", () => {
+    answers[step] = iEl.value.trim();
+    step++;
+    if (step < questions.length) {
+      render();
+    } else {
+      qEl.textContent = "Done.";
+      iEl.style.display = "none";
+      bEl.style.display = "none";
+      pEl.textContent = "Result";
+      renderPreview();
+    }
+  });
+
+  render();
+</script>
+
+</body>
+</html>
