@@ -190,16 +190,23 @@ function placeSymbol(answer, zone) {
   el.className = "symbol";
   el.textContent = SYMBOLS[answer] || "⬜";
 
-  const index = zoneCounters[zone]++;
-  const col = index % 3;
-  const row = Math.floor(index / 3);
+  const padding = 40;
+  const w = zoneEl.clientWidth - padding * 2;
+  const h = zoneEl.clientHeight - padding * 2;
 
-  el.style.left = `${20 + col * 48}px`;
-  el.style.top  = `${40 + row * 48}px`;
+  // deterministisk spridning (inte random, inte grid)
+  const index = zoneCounters[zone]++;
+  const angle = index * 1.7; // spridning
+  const radius = 30 + index * 12;
+
+  const x = padding + w / 2 + Math.cos(angle) * radius;
+  const y = padding + h / 2 + Math.sin(angle) * radius;
+
+  el.style.left = `${x}px`;
+  el.style.top = `${y}px`;
 
   zoneEl.appendChild(el);
 }
-
 function finish() {
   qEl.textContent = "Your WishPic is ready.";
   optionsEl.innerHTML = "";
