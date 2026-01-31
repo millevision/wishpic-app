@@ -266,15 +266,15 @@
   el.textContent = symbol;
 
   document.getElementById(`zone-${zone}`).appendChild(el);
+}
 
-  function showResult() {
-    qEl.textContent = "Done.";
-    document.querySelector(".options").remove();
-    pEl.textContent = "Result";
-    renderPreview();
-  }
+function showResult() {
+  qEl.textContent = "Done.";
+  document.querySelector(".options").remove();
+  pEl.textContent = "Result";
+}
 
-  render();
+render();
 </script>
 
 
