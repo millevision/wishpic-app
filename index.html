@@ -159,29 +159,96 @@ const SYMBOLS = {
 };
 
 const steps = [
-  { q:"Vilket område är du inom?", zone:"situation",
-    options:["IT & programvara","Tillverkning","Företagstjänster","Transport & logistik","Energi","Jordbruk","Hälsa","Bygg / Government"] },
+  {
+    q: "What field are you in?",
+    zone: "situation",
+    options: [
+      "IT & Software",
+      "Manufacturing",
+      "Corporate Services",
+      "Transport & Logistics",
+      "Energy",
+      "Agriculture",
+      "Health",
+      "Construction / Government"
+    ]
+  },
 
-  { q:"Är du som företag idag?", zone:"situation",
-    options:["Startup","Etablerad","Transformerande","Återuppfinnande"] },
+  {
+    q: "As a company, you are currently:",
+    zone: "situation",
+    options: [
+      "Startup",
+      "Established",
+      "Transforming",
+      "Re-inventing"
+    ]
+  },
 
-  { q:"Ikon som liknar er situation mest", zone:"situation",
-    options:["Träd","Skepp","Ballong","Ubåt","Vindkraftverk"] },
+  {
+    q: "Which icon best represents your current situation?",
+    zone: "situation",
+    options: [
+      "Tree",
+      "Ship",
+      "Balloon",
+      "Submarine",
+      "Windmill"
+    ]
+  },
 
-  { q:"Vad behöver ni mest just nu?", zone:"path",
-    options:["Strategi","Marknadsplan","Roadmap"] },
+  {
+    q: "What do you need most right now?",
+    zone: "path",
+    options: [
+      "Strategy",
+      "Market plan",
+      "Roadmap"
+    ]
+  },
 
-  { q:"Hur vill ni utvecklas?", zone:"path",
-    options:["Organiskt","Kort sikt","Lång sikt"] },
+  {
+    q: "How do you want to evolve?",
+    zone: "path",
+    options: [
+      "Organically",
+      "Short term",
+      "Long term"
+    ]
+  },
 
-  { q:"Ikon för största utmaningen", zone:"path",
-    options:["Kanoner","Eld","Regn","Virus"] },
+  {
+    q: "Which icon represents your biggest challenge?",
+    zone: "path",
+    options: [
+      "Cannons",
+      "Fire",
+      "Rain",
+      "Virus"
+    ]
+  },
 
-  { q:"Vilken vision driver er?", zone:"vision",
-    options:["Växa snabbt","Lösa problem","Göra saker bättre","Uppgradera"] },
+  {
+    q: "Which vision is driving you?",
+    zone: "vision",
+    options: [
+      "Grow fast",
+      "Solve problems",
+      "Make things better",
+      "Upgrade"
+    ]
+  },
 
-  { q:"Välj ikon för ert mål", zone:"vision",
-    options:["Triangel","Kvadrat","Cirkel","Stjärna"] }
+  {
+    q: "Choose an icon for your goal",
+    zone: "vision",
+    options: [
+      "Triangle",
+      "Square",
+      "Circle",
+      "Star"
+    ]
+  }
 ];
 
 /* ---------------- STATE ---------------- */
