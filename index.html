@@ -1,216 +1,172 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>WishPic – Visual Strategy</title>
+<meta charset="UTF-8" />
+<title>WishPic – MVP</title>
+<style>
+  body {
+    margin: 0;
+    font-family: system-ui, sans-serif;
+    background: #0f0f0f;
+    color: #eaeaea;
+    display: flex;
+    height: 100vh;
+  }
 
-  <style>
-    * { box-sizing: border-box; }
+  .left {
+    width: 40%;
+    padding: 24px;
+    border-right: 1px solid #222;
+  }
 
-    body {
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      font-family: Inter, system-ui, sans-serif;
-      background: #0f0f0f;
-      color: #eaeaea;
-    }
+  .right {
+    width: 60%;
+    padding: 24px;
+  }
 
-    /* LEFT: FORM */
-    .left {
-      width: 42%;
-      padding: 32px;
-      border-right: 1px solid #222;
-    }
+  h1 { font-size: 18px; margin-top: 0; }
 
-    .progress {
-      font-size: 12px;
-      color: #777;
-      margin-bottom: 16px;
-    }
+  .option {
+    display: inline-block;
+    margin: 6px 6px 0 0;
+    padding: 6px 12px;
+    background: #222;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 13px;
+  }
 
-    h1 {
-      font-size: 20px;
-      margin: 0 0 16px 0;
-    }
+  .option:hover { background: #444; }
 
-    .options button {
-      display: block;
-      width: 100%;
-      text-align: left;
-      margin-bottom: 8px;
-      padding: 10px 14px;
-      border-radius: 18px;
-      border: 1px solid #333;
-      background: #111;
-      color: #fff;
-      cursor: pointer;
-      font-size: 14px;
-    }
+  .map {
+    display: flex;
+    height: 100%;
+    gap: 24px;
+  }
 
-    .options button:hover {
-      background: #1a1a1a;
-    }
+  .zone {
+    flex: 1;
+    border: 1px dashed #333;
+    border-radius: 8px;
+    padding: 12px;
+    position: relative;
+  }
 
-    /* RIGHT: VISUAL MAP */
-    .right {
-      width: 58%;
-      padding: 32px;
-      position: relative;
-    }
+  .symbol {
+    font-size: 28px;
+    margin: 6px;
+    display: inline-block;
+  }
 
-    .map {
-      position: relative;
-      height: 100%;
-    }
-
-    /* Invisible logical zones */
-    .zone {
-      position: absolute;
-      top: 80px;
-      height: calc(100% - 120px);
-      padding: 10px;
-    }
-
-    #zone-situation { left: 0; width: 30%; }
-    #zone-path      { left: 35%; width: 30%; }
-    #zone-vision    { left: 70%; width: 30%; }
-
-    /* SYMBOLS */
-    .symbol {
-      position: absolute;
-      font-size: 28px;
-      opacity: 0;
-      animation: appear 0.3s ease forwards;
-    }
-
-    @keyframes appear {
-      to { opacity: 1; }
-    }
-
-    .hint {
-      position: absolute;
-      bottom: 24px;
-      left: 32px;
-      color: #555;
-      font-size: 12px;
-    }
-  </style>
+  .label {
+    font-size: 12px;
+    color: #777;
+    margin-bottom: 6px;
+  }
+</style>
 </head>
 
 <body>
 
-  <!-- LEFT -->
-  <div class="left">
-    <div class="progress" id="progress"></div>
-    <h1 id="question"></h1>
-    <div class="options" id="options"></div>
-  </div>
+<div class="left">
+  <div id="progress"></div>
+  <h1 id="question"></h1>
+  <div id="options"></div>
+</div>
 
-  <!-- RIGHT -->
-  <div class="right">
-    <div class="map">
-      <div class="zone" id="zone-situation"></div>
-      <div class="zone" id="zone-path"></div>
-      <div class="zone" id="zone-vision"></div>
+<div class="right">
+  <h1>WishPic – Live Map</h1>
+  <div class="map">
+    <div class="zone" id="zone-situation">
+      <div class="label">Situation</div>
     </div>
-    <div class="hint">Situation → Path → Vision</div>
+    <div class="zone" id="zone-path">
+      <div class="label">Path</div>
+    </div>
+    <div class="zone" id="zone-vision">
+      <div class="label">Vision</div>
+    </div>
   </div>
+</div>
 
 <script>
-/* SYMBOL LANGUAGE (replace with your own icons later) */
 const SYMBOLS = {
-  Startup: "🚀",
-  Scaleup: "📈",
-  "Innovation team": "🧪",
-  "Business development": "🧭",
+  "IT & programvara":"💻","Tillverkning":"🏭","Företagstjänster":"🏢",
+  "Transport & logistik":"🚚","Energi":"⚡","Jordbruk":"🌾","Hälsa":"🩺","Bygg / Government":"🏗️",
 
-  "Grow faster": "⚡",
-  "Find focus": "🎯",
-  "Align the team": "🤝",
-  "Explore new directions": "🌱",
+  "Startup":"🚀","Etablerad":"🏛️","Transformerande":"🔁","Återuppfinnande":"🧠",
 
-  "Clear strategy": "🗺️",
-  "Stronger execution": "🔧",
-  "New business model": "💡",
-  "Scalable growth": "🏗️",
+  "Träd":"🌳","Skepp":"🚢","Ballong":"🎈","Ubåt":"🚤","Vindkraftverk":"🌬️",
 
-  Priorities: "⭐",
-  Ownership: "🖐️",
-  Speed: "⏩",
-  Quality: "✔️"
+  "Strategi":"🗺️","Marknadsplan":"📣","Roadmap":"🧭",
+
+  "Organiskt":"🌱","Kort sikt":"⏱️","Lång sikt":"📆",
+
+  "Kanoner":"💣","Eld":"🔥","Regn":"🌧️","Virus":"🦠",
+
+  "Växa snabbt":"📈","Lösa problem":"🧩","Göra saker bättre":"✨","Uppgradera":"⬆️",
+
+  "Triangel":"🔺","Kvadrat":"⬛","Cirkel":"⚪","Stjärna":"⭐"
 };
 
-/* METHOD: 1 (situation) → 3 (path) → 2 (vision) */
 const steps = [
-  { q: "What best describes your organization?", zone: "situation",
-    options: ["Startup","Scaleup","Innovation team","Business development"] },
+  { q:"Vilket område är du inom?", zone:"situation",
+    options:["IT & programvara","Tillverkning","Företagstjänster","Transport & logistik","Energi","Jordbruk","Hälsa","Bygg / Government"] },
 
-  { q: "What matters most to get right?", zone: "path",
-    options: ["Priorities","Ownership","Speed","Quality"] },
+  { q:"Är du som företag idag?", zone:"situation",
+    options:["Startup","Etablerad","Transformerande","Återuppfinnande"] },
 
-  { q: "What is your main ambition?", zone: "vision",
-    options: ["Grow faster","Find focus","Align the team","Explore new directions"] },
+  { q:"Ikon som liknar er situation mest", zone:"situation",
+    options:["Träd","Skepp","Ballong","Ubåt","Vindkraftverk"] },
 
-  { q: "If things go well, what should be true in 12–24 months?", zone: "vision",
-    options: ["Clear strategy","Stronger execution","New business model","Scalable growth"] }
+  { q:"Vad behöver ni mest just nu?", zone:"path",
+    options:["Strategi","Marknadsplan","Roadmap"] },
+
+  { q:"Hur vill ni utvecklas?", zone:"path",
+    options:["Organiskt","Kort sikt","Lång sikt"] },
+
+  { q:"Ikon för största utmaningen", zone:"path",
+    options:["Kanoner","Eld","Regn","Virus"] },
+
+  { q:"Vilken vision driver er?", zone:"vision",
+    options:["Växa snabbt","Lösa problem","Göra saker bättre","Uppgradera"] },
+
+  { q:"Välj ikon för ert mål", zone:"vision",
+    options:["Triangel","Kvadrat","Cirkel","Stjärna"] }
 ];
 
 let step = 0;
-const zoneCounters = { situation:0, path:0, vision:0 };
 
 const qEl = document.getElementById("question");
+const oEl = document.getElementById("options");
 const pEl = document.getElementById("progress");
-const optionsEl = document.getElementById("options");
 
 function render() {
-  const s = steps[step];
-  pEl.textContent = `${step + 1} / ${steps.length}`;
-  qEl.textContent = s.q;
+  pEl.textContent = `${step+1} / ${steps.length}`;
+  qEl.textContent = steps[step].q;
+  oEl.innerHTML = "";
 
-  optionsEl.innerHTML = "";
-  s.options.forEach(opt => {
-    const btn = document.createElement("button");
-    btn.textContent = opt;
-    btn.onclick = () => select(opt, s.zone);
-    optionsEl.appendChild(btn);
+  steps[step].options.forEach(opt=>{
+    const b = document.createElement("div");
+    b.className = "option";
+    b.textContent = opt;
+    b.onclick = ()=>select(opt);
+    oEl.appendChild(b);
   });
 }
 
-function select(answer, zone) {
-  placeSymbol(answer, zone);
-  step++;
-  if (step < steps.length) render();
-  else finish();
-}
+function select(answer) {
+  const zone = steps[step].zone;
+  const symbol = SYMBOLS[answer] || "⬜";
 
-function placeSymbol(answer, zone) {
-  const zoneEl = document.getElementById(`zone-${zone}`);
   const el = document.createElement("div");
   el.className = "symbol";
-  el.textContent = SYMBOLS[answer] || "⬜";
+  el.textContent = symbol;
+  document.getElementById("zone-"+zone).appendChild(el);
 
-  const padding = 40;
-  const w = zoneEl.clientWidth - padding * 2;
-  const h = zoneEl.clientHeight - padding * 2;
-
-  // deterministisk spridning (inte random, inte grid)
-  const index = zoneCounters[zone]++;
-  const angle = index * 1.7; // spridning
-  const radius = 30 + index * 12;
-
-  const x = padding + w / 2 + Math.cos(angle) * radius;
-  const y = padding + h / 2 + Math.sin(angle) * radius;
-
-  el.style.left = `${x}px`;
-  el.style.top = `${y}px`;
-
-  zoneEl.appendChild(el);
-}
-function finish() {
-  qEl.textContent = "Your WishPic is ready.";
-  optionsEl.innerHTML = "";
-  pEl.textContent = "Done";
+  step++;
+  if(step < steps.length) render();
+  else qEl.textContent = "Klar.";
 }
 
 render();
