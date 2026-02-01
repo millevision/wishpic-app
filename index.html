@@ -326,7 +326,7 @@ function renderQuestion() {
       place(opt, steps[step].zone);
       step++;
       if(step < steps.length) renderQuestion();
-      else qEl.textContent = "Klar.";
+      else qEl.textContent = "Done.";
     };
     oEl.appendChild(b);
   });
