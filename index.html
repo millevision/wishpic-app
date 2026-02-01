@@ -1,30 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sv">
 <head>
 <meta charset="UTF-8" />
-<title>WishPic – MVP</title>
+<title>WishPic – One Space Test</title>
+
 <style>
   body {
     margin: 0;
-    font-family: system-ui, sans-serif;
-    background: #0f0f0f;
-    color: #eaeaea;
-    display: flex;
     height: 100vh;
+    background: #0f0f0f;
+    font-family: system-ui, sans-serif;
+    color: #eaeaea;
+    overflow: hidden;
   }
 
-  .left {
-    width: 40%;
-    padding: 24px;
-    border-right: 1px solid #222;
+  /* EN YTA */
+  .canvas {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background:
+      radial-gradient(circle at bottom left, #1a1a1a, #0f0f0f 60%);
   }
 
-  .right {
-    width: 60%;
-    padding: 24px;
+  /* FRÅGOR (flytande, inte kolumn) */
+  .question-box {
+    position: absolute;
+    left: 24px;
+    top: 24px;
+    max-width: 320px;
+    background: rgba(20,20,20,0.9);
+    padding: 16px;
+    border-radius: 10px;
+    border: 1px solid #222;
   }
-
-  h1 { font-size: 18px; margin-top: 0; }
 
   .option {
     display: inline-block;
@@ -35,113 +44,120 @@
     cursor: pointer;
     font-size: 13px;
   }
+  .option:hover { background:#444; }
 
-  .option:hover { background: #444; }
-
-  .map {
-    display: flex;
-    height: 100%;
-    gap: 24px;
-  }
-
-  .zone {
-    flex: 1;
-    border: 1px dashed #333;
-    border-radius: 8px;
-    padding: 12px;
-    position: relative;
-  }
-
+  /* SYMBOLER */
   .symbol {
-    font-size: 28px;
-    margin: 6px;
-    display: inline-block;
+    position: absolute;
+    font-size: 26px;
+    transition: all .4s ease;
   }
+
+  /* ANKARE (synliga nu, döljs sen) */
+  .anchor {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    opacity: .5;
+  }
+  #situation { left: 8%; bottom: 18%; background:#ff6666; }
+  #vision { right: 12%; top: 18%; background:#66ff99; }
 
   .label {
+    position: absolute;
     font-size: 12px;
     color: #777;
-    margin-bottom: 6px;
+    transform: translate(-50%, -150%);
   }
 </style>
 </head>
 
 <body>
 
-<div class="left">
-  <div id="progress"></div>
-  <h1 id="question"></h1>
-  <div id="options"></div>
-</div>
+<div class="canvas" id="canvas">
 
-<div class="right">
-  <h1>WishPic – Live Map</h1>
-  <div class="map">
-    <div class="zone" id="zone-situation">
-      <div class="label">Situation</div>
-    </div>
-    <div class="zone" id="zone-path">
-      <div class="label">Path</div>
-    </div>
-    <div class="zone" id="zone-vision">
-      <div class="label">Vision</div>
-    </div>
+  <!-- Frågor -->
+  <div class="question-box">
+    <div id="progress"></div>
+    <strong id="question"></strong>
+    <div id="options"></div>
   </div>
+
+  <!-- Ankare -->
+  <div id="situation" class="anchor">
+    <div class="label">Situation</div>
+  </div>
+  <div id="vision" class="anchor">
+    <div class="label">Vision</div>
+  </div>
+
 </div>
 
 <script>
+/* DATA */
 const SYMBOLS = {
-  "IT & programvara":"💻","Tillverkning":"🏭","Företagstjänster":"🏢",
-  "Transport & logistik":"🚚","Energi":"⚡","Jordbruk":"🌾","Hälsa":"🩺","Bygg / Government":"🏗️",
-
   "Startup":"🚀","Etablerad":"🏛️","Transformerande":"🔁","Återuppfinnande":"🧠",
-
-  "Träd":"🌳","Skepp":"🚢","Ballong":"🎈","Ubåt":"🚤","Vindkraftverk":"🌬️",
-
   "Strategi":"🗺️","Marknadsplan":"📣","Roadmap":"🧭",
-
-  "Organiskt":"🌱","Kort sikt":"⏱️","Lång sikt":"📆",
-
-  "Kanoner":"💣","Eld":"🔥","Regn":"🌧️","Virus":"🦠",
-
-  "Växa snabbt":"📈","Lösa problem":"🧩","Göra saker bättre":"✨","Uppgradera":"⬆️",
-
-  "Triangel":"🔺","Kvadrat":"⬛","Cirkel":"⚪","Stjärna":"⭐"
+  "Växa snabbt":"📈","Lösa problem":"🧩","Göra saker bättre":"✨","Uppgradera":"⬆️"
 };
 
 const steps = [
-  { q:"Vilket område är du inom?", zone:"situation",
-    options:["IT & programvara","Tillverkning","Företagstjänster","Transport & logistik","Energi","Jordbruk","Hälsa","Bygg / Government"] },
-
   { q:"Är du som företag idag?", zone:"situation",
     options:["Startup","Etablerad","Transformerande","Återuppfinnande"] },
-
-  { q:"Ikon som liknar er situation mest", zone:"situation",
-    options:["Träd","Skepp","Ballong","Ubåt","Vindkraftverk"] },
 
   { q:"Vad behöver ni mest just nu?", zone:"path",
     options:["Strategi","Marknadsplan","Roadmap"] },
 
-  { q:"Hur vill ni utvecklas?", zone:"path",
-    options:["Organiskt","Kort sikt","Lång sikt"] },
-
-  { q:"Ikon för största utmaningen", zone:"path",
-    options:["Kanoner","Eld","Regn","Virus"] },
-
   { q:"Vilken vision driver er?", zone:"vision",
-    options:["Växa snabbt","Lösa problem","Göra saker bättre","Uppgradera"] },
-
-  { q:"Välj ikon för ert mål", zone:"vision",
-    options:["Triangel","Kvadrat","Cirkel","Stjärna"] }
+    options:["Växa snabbt","Lösa problem","Göra saker bättre","Uppgradera"] }
 ];
 
 let step = 0;
 
+/* ELEMENT */
 const qEl = document.getElementById("question");
 const oEl = document.getElementById("options");
 const pEl = document.getElementById("progress");
+const canvas = document.getElementById("canvas");
 
-function render() {
+const sAnchor = document.getElementById("situation");
+const vAnchor = document.getElementById("vision");
+
+function rand(min,max){ return min + Math.random()*(max-min); }
+
+function place(answer, zone) {
+  const el = document.createElement("div");
+  el.className = "symbol";
+  el.textContent = SYMBOLS[answer] || "⬜";
+
+  const s = sAnchor.getBoundingClientRect();
+  const v = vAnchor.getBoundingClientRect();
+  const c = canvas.getBoundingClientRect();
+
+  let x,y;
+
+  if(zone==="situation"){
+    x = s.left - c.left + rand(-40,40);
+    y = s.top - c.top + rand(-40,40);
+  }
+
+  if(zone==="vision"){
+    x = v.left - c.left + rand(-20,20);
+    y = v.top - c.top + rand(-20,20);
+  }
+
+  if(zone==="path"){
+    x = rand(s.left, v.left) - c.left;
+    y = rand(v.top, s.top) - c.top;
+  }
+
+  el.style.left = x+"px";
+  el.style.top = y+"px";
+  canvas.appendChild(el);
+}
+
+function render(){
   pEl.textContent = `${step+1} / ${steps.length}`;
   qEl.textContent = steps[step].q;
   oEl.innerHTML = "";
@@ -150,23 +166,14 @@ function render() {
     const b = document.createElement("div");
     b.className = "option";
     b.textContent = opt;
-    b.onclick = ()=>select(opt);
+    b.onclick = ()=>{
+      place(opt, steps[step].zone);
+      step++;
+      if(step<steps.length) render();
+      else qEl.textContent = "Klar.";
+    };
     oEl.appendChild(b);
   });
-}
-
-function select(answer) {
-  const zone = steps[step].zone;
-  const symbol = SYMBOLS[answer] || "⬜";
-
-  const el = document.createElement("div");
-  el.className = "symbol";
-  el.textContent = symbol;
-  document.getElementById("zone-"+zone).appendChild(el);
-
-  step++;
-  if(step < steps.length) render();
-  else qEl.textContent = "Klar.";
 }
 
 render();
